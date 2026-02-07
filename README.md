@@ -18,16 +18,125 @@ Input Image → Background Removal → Neural Geometry Inference → Mesh Extrac
 - torchmcubes
 - trimesh
 - Blender / Fusion 360 (post-processing)
+## MAIN EXECUTION FILE (scripts/run_pipeline.py)
+run_pipeline.py
+Single-View Image-to-3D Reconstruction Pipeline using TripoSR
+
+Author: Tanay Sidhu
+"""
+
+import os
+import subprocess
+import sys
+from utils import check_dependencies, create_dirs, print_banner
+
+# ---------------- CONFIG ---------------- #
+IMAGE_PATH = "data/inputs/object.jpeg"
+OUTPUT_DIR = "results"
+DEVICE = "cuda"   # change to 'cpu' if GPU unavailable
+# ---------------------------------------- #
+
+def run_triposr():
+    command = [
+        sys.executable,
+        "run.py",
+        IMAGE_PATH,
+        "--output-dir", OUTPUT_DIR,
+        "--device", DEVICE,
+        "--no-bake-texture"
+    ]
+
+    print("\n[INFO] Running TripoSR reconstruction...\n")
+    subprocess.run(command, check=True)
+
+def main():
+    print_banner()
+    create_dirs()
+    check_dependencies()
+    run_triposr()
+
+if __name__ == "__main__":
+    main()
+
+## HELPER FUNCTIONS (scripts/utils.py)
+"""
+utils.py
+Helper functions for execution and checks
+"""
+
+import os
+import importlib
+import sys
+
+REQUIRED_PACKAGES = [
+    "torch",
+    "trimesh",
+    "einops",
+    "omegaconf",
+    "onnxruntime",
+    "rembg"
+]
+
+def print_banner():
+    print("=" * 60)
+    print(" Single-View Image-to-3D Reconstruction (TripoSR) ")
+    print(" Author: Tanay Sidhu")
+    print("=" * 60)
+
+def create_dirs():
+    os.makedirs("data/inputs", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
+
+def check_dependencies():
+    print("\n[INFO] Checking dependencies...\n")
+    missing = []
+    for pkg in REQUIRED_PACKAGES:
+        try:
+            importlib.import_module(pkg)
+        except ImportError:
+            missing.append(pkg)
+
+    if missing:
+        print("[ERROR] Missing dependencies:")
+        for pkg in missing:
+            print(f" - {pkg}")
+        print("\nPlease install requirements before running.")
+        sys.exit(1)
+    else:
+        print("[INFO] All dependencies found.\n")
+
+## ENVIRONMENT CHECK FILE (scripts/check_env.py)
+import sys
+import torch
+
+print("Python Version:", sys.version)
+print("Torch Version:", torch.__version__)
+print("CUDA Available:", torch.cuda.is_available())
+
+## REQUIREMENTS FILE (requirements.txt)
+torch
+torchvision
+torchaudio
+onnxruntime
+trimesh
+einops
+omegaconf
+rembg
+
+python scripts/run_pipeline.py
+
 ## Engineering Applications
 - Mechanical design conceptualization
 - Prosthetic geometry modeling
 - Reverse engineering
 - Additive manufacturing preparation
+  
 ## Challenges Faced
 - Python version incompatibilities
 - Dependency conflicts in research code
 - Installation of non-PyPI geometry libraries
 - CUDA and CPU execution handling
+
 ## Installation
 
 ```bash
