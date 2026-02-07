@@ -18,6 +18,16 @@ Input Image → Background Removal → Neural Geometry Inference → Mesh Extrac
 - torchmcubes
 - trimesh
 - Blender / Fusion 360 (post-processing)
+## Engineering Applications
+- Mechanical design conceptualization
+- Prosthetic geometry modeling
+- Reverse engineering
+- Additive manufacturing preparation
+## Challenges Faced
+- Python version incompatibilities
+- Dependency conflicts in research code
+- Installation of non-PyPI geometry libraries
+- CUDA and CPU execution handling
 ## Installation
 
 ```bash
@@ -49,3 +59,12 @@ Mention:
 ```markdown
 ## Results
 The pipeline successfully reconstructs coherent 3D geometry from a single RGB image. The generated meshes can be imported into CAD environments after minimal cleanup.
+
+
+
+## Author
+Tanay Sidhu  
+Second-year Mechanical Engineering student, UIET Panjab University
+
+## Credits
+TripoSR by VAST AI Research
